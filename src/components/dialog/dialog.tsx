@@ -111,11 +111,12 @@ let DialogRoot = forwardRefWithAs(function Dialog<
     PropsForFeatures<typeof DialogRenderFeatures> & {
       open?: boolean
       onClose(value: boolean): void
+      disableFocusTrap?: boolean
       initialFocus?: MutableRefObject<HTMLElement | null>
     },
   ref: Ref<HTMLDivElement>
 ) {
-  let { open, onClose, initialFocus, ...rest } = props
+  let { open, onClose, disableFocusTrap, initialFocus, ...rest } = props
   let [nestedDialogCount, setNestedDialogCount] = useState(0)
 
   let usesOpenClosedState = useOpenClosed()
@@ -195,7 +196,7 @@ let DialogRoot = forwardRefWithAs(function Dialog<
 
   useFocusTrap(
     internalDialogRef,
-    enabled
+    enabled && !disableFocusTrap
       ? match(position, {
           parent: FocusTrapFeatures.RestoreFocus,
           leaf: FocusTrapFeatures.All,
